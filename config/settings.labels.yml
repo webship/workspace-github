@@ -1,0 +1,16 @@
+# Labels for core/config/plugin.github.settings.yml, merged into the Settings page.
+host:
+  label: Host
+  info: 'github.com, or a GitHub Enterprise host.'
+use_gh_cli:
+  label: Prefer the gh login
+  info: 'Authenticate with the gh CLI''s own login when it works, and only fall back to the token below.'
+username:
+  label: Username
+  info: 'The account name GitHub knows you by.'
+email:
+  label: Commit email
+  info: 'The address commits pushed to GitHub carry. Blank falls back to contributor.email.'
+token:
+  label: Token
+  info: 'A fine-grained personal access token (Settings → Developer settings). Read-only is enough for the lists and the AI-items sync; pull requests from the dashboard need write on the repositories.'

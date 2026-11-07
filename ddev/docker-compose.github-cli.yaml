@@ -1,0 +1,7 @@
+# The gh CLI and its config, shared FROM THE HOST: the bin DIRECTORY is mounted, not the file,
+# so an update on the host is live in the container at once.
+services:
+  web:
+    volumes:
+      - "${HOME}/.local/bin:/host-local-bin:ro"
+      - "${HOME}/.config/gh:/home/${USER}/.config/gh:rw"

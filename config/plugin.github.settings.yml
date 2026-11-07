@@ -1,0 +1,13 @@
+# GitHub — core/config/plugin.github.settings.yml
+#
+# How the dashboard reaches GitHub. gh's own login is used when it works (on the host); inside the dashboard container the token lives in the host keyring, which the container cannot read, so the token below is what the dashboard uses there. Never printed, never written to a job log.
+# github.com, or a GitHub Enterprise host.
+host: github.com
+# Authenticate with the gh CLI's own login when it works, and only fall back to the token below.
+use_gh_cli: true
+# The account name GitHub knows you by.
+username: CHANGE_ME
+# The address commits pushed to GitHub carry. Blank falls back to contributor.email.
+email: CHANGE_ME
+# A fine-grained personal access token (Settings → Developer settings). Read-only is enough for the lists and the AI-items sync; pull requests from the dashboard need write on the repositories.
+token: CHANGE_ME

@@ -1,0 +1,55 @@
+{
+  "name": "@webship/workspace-github",
+  "version": "1.0.0",
+  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, and the credential gh-based work uses from the dashboard. A provider of @webship/workspace-forge.",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "private": true,
+  "license": "ISC",
+  "repository": "github:webship/workspace-github",
+  "files": [
+    "dist/src",
+    "config",
+    "features",
+    "scripts",
+    "README.md",
+    "ddev",
+    "host-mounts.txt"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "workspacePlugin": {
+    "name": "github",
+    "label": "GitHub",
+    "settingsFile": "plugin.github.settings.yml",
+    "settingsTemplate": "config/plugin.github.settings.yml",
+    "labels": "config/settings.labels.yml",
+    "legacySettingsKey": "git.github",
+    "scripts": {
+      "hostInstall": "scripts/host-install.sh"
+    },
+    "features": [
+      "features/github.feature"
+    ],
+    "ddev": {
+      "compose": [
+        "ddev/docker-compose.github-cli.yaml"
+      ],
+      "hostMounts": [
+        "~/.config/gh"
+      ]
+    }
+  },
+  "dependencies": {
+    "@webship/workspace-forge": "github:webship/workspace-forge#1.0.x"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@webship/workspace-plugin-api": "github:webship/workspace-plugin-api#1.0.x",
+    "typescript": "^5.9.0"
+  }
+}
