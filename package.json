@@ -1,12 +1,14 @@
 {
-  "name": "@webship/workspace-github",
-  "version": "1.0.0",
-  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, and the credential gh-based work uses from the dashboard. A provider of @webship/workspace-forge.",
+  "name": "@webship.co/workspace-github",
+  "version": "1.0.0-alpha1",
+  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, and the credential gh-based work uses from the dashboard. A provider of @webship.co/workspace-forge.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
-  "private": true,
   "license": "ISC",
-  "repository": "github:webship/workspace-github",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webship/workspace-github.git"
+  },
   "files": [
     "dist/src",
     "config",
@@ -45,11 +47,14 @@
     }
   },
   "dependencies": {
-    "@webship/workspace-forge": "github:webship/workspace-forge#1.0.x"
+    "@webship.co/workspace-forge": "^1.0.0-alpha1"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
-    "@webship/workspace-plugin-api": "github:webship/workspace-plugin-api#1.0.x",
+    "@webship.co/workspace-plugin-api": "^1.0.0-alpha1",
     "typescript": "^5.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
