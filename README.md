@@ -1,10 +1,10 @@
-# @webship/workspace-github
+# @webship.co/workspace-github
 
 GitHub for the [Webship Workspace](https://github.com/webship/workspace) dashboard: the **GITHUB**
 menu on every project whose git remote is on GitHub (open the repository, the open issues and
 pull requests, open one from the current branch, copy the clone URL), the repository chip on the
 card, "Clone a repository" when a new folder is made, and the credential the dashboard uses for the
-host. A provider of [`@webship/workspace-forge`](https://github.com/webship/workspace-forge).
+host. A provider of [`@webship.co/workspace-forge`](https://github.com/webship/workspace-forge).
 
 The lists come from `gh` (`gh issue list`, `gh pr list`) with the token in the environment, or from the REST API with `curl` when gh is not there; a pull request from the current branch is `gh pr create --head <branch> --fill` in a terminal in the project. The token also serves the dashboard's other GitHub work (the AI-items sync, the tooling repository): `github-auth.js` asks this plugin first, through `api.addForge('github.com', …)`.
 
