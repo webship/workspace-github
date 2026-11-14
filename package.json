@@ -27,6 +27,14 @@
   "workspacePlugin": {
     "name": "github",
     "label": "GitHub",
+    "needs": {
+      "commands": [
+        {
+          "command": "gh",
+          "hint": "https://cli.github.com"
+        }
+      ]
+    },
     "settingsFile": "plugin.github.settings.yml",
     "settingsTemplate": "config/plugin.github.settings.yml",
     "labels": "config/settings.labels.yml",
