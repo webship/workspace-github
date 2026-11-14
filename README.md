@@ -20,6 +20,17 @@ bash core/scripts/plugins.sh --configure github
 
 The same four steps are buttons on the dashboard's **Settings → Plugins** page.
 
+## What it needs
+
+On the machine this plugin needs `gh` (https://cli.github.com), and its manifest says so (`needs.commands`). The workspace reports it and never installs it:
+
+```bash
+bash core/scripts/plugins.sh --check github      # found, with its version, or missing, with how to install it
+webship-workspace doctor                        # the same for the core and every plugin
+```
+
+It needs no other plugin: its menu is on the project rows of whatever folders the workspace has.
+
 ## What the package holds
 
 | Path | What it is |
