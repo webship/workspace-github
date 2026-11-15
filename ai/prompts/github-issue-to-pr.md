@@ -27,3 +27,5 @@ When the checks are green: the address of the pull request, what was tested, and
 are still open. Leave the merge to me.
 """
 ```
+
+The text between the triple quotes is plain: it can be given to another AI command-line assistant as it is.
