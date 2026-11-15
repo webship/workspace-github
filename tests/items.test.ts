@@ -34,6 +34,7 @@ function filesUnder(rel: string): string[] {
 const ITEM_FILES: string[] = Object.keys(KINDS).flatMap((kind) => (manifest.ai[kind] || []).flatMap(filesUnder));
 const MAIN_FILES: string[] = [...manifest.ai.agents, ...manifest.ai.commands, ...manifest.ai.prompts, ...manifest.ai.skills.map((s: string) => `${s}/SKILL.md`)];
 const frontmatter = (src: string) => (src.startsWith('---\n') ? src.split('\n---\n')[0] : '');
+const bodyOf = (src: string) => (src.startsWith('---\n') ? src.split('\n---\n').slice(1).join('\n---\n') : src);
 // The plugins the manifest needs: a list alone, or the `plugins` of the object that also carries the commands.
 const neededPlugins: unknown[] = Array.isArray(manifest.needs) ? manifest.needs : (manifest.needs.plugins || []);
 
@@ -239,4 +240,25 @@ test('the items say container-based, name the plugin they come with, and carry n
   }
   const readme = read('README.md');
   for (const name of [...AGENTS, ...SKILLS, ...AI_COMMANDS, ...PROMPTS]) assert.ok(readme.includes(name), `the README lists ${name}`);
+});
+
+test('the body of every item is plain Markdown: it names no tool or feature of one AI command-line assistant', () => {
+  for (const f of ITEM_FILES.filter((x) => x.endsWith('.md'))) {
+    // What is left once the default launch line of a prompt is taken out: the words an assistant is asked to follow.
+    const body = bodyOf(read(f)).replace(/^\s*claude --permission-mode bypassPermissions """\s*$/m, '');
+    for (const m of body.matchAll(/\b(Bash|Read|Write|Edit|Grep|Glob|Task|Agent|Skill|TodoWrite|WebFetch) tool\b|\bsubagents?\b|bypassPermissions|\bClaude\b|\bclaude -p\b|\.claude\/|\bMCP\b|mcp__/g)) {
+      assert.fail(`${f}: "${m[0]}" belongs to one AI assistant; the body is for any of them`);
+    }
+  }
+});
+
+test('Claude Code stays the default shape: a prompt says its text works in another assistant, a command says its arguments in words', () => {
+  for (const f of manifest.ai.prompts) {
+    assert.match(read(f), /^\s*claude --permission-mode bypassPermissions """\s*$/m, `${f} keeps the default launch command`);
+    assert.match(read(f), /^The text between the triple quotes is plain: it can be given to another AI command-line assistant as it is\.$/m, `${f} says its text is not tied to one assistant`);
+  }
+  for (const f of manifest.ai.commands) {
+    assert.ok(read(f).includes('$ARGUMENTS'), `${f} reads what was typed after the command`);
+    assert.match(bodyOf(read(f)), /The (first word|argument) is /, `${f} says in words what the arguments are, for an assistant that does not fill $ARGUMENTS in`);
+  }
 });

@@ -55,6 +55,20 @@ appended to the list. A kind that is not shipped is in neither `ai` nor `needs`.
 Names start with `<p>-`. A command and a prompt never share a name: both are installed into
 `~/.claude/commands`.
 
+## For any AI command-line assistant, Claude Code by default
+
+The body of an agent, a skill, a command and a prompt is plain Markdown any AI command-line
+assistant can follow: "run this command", "read this file", "say what it answers". It names no tool
+or feature of one assistant. Claude Code stays the default shape, and only the shape:
+
+- the frontmatter and the file layout above are Claude Code's;
+- a prompt keeps `claude --permission-mode bypassPermissions` as its default launch command, and
+  ends with one line that says the text between the quotes can be given to another assistant as it is;
+- a slash command keeps `$ARGUMENTS`, and also says in words what the arguments are ("The first
+  word is the project…"), for an assistant that does not fill it in.
+
+`tests/items.test.ts` holds every body to this.
+
 ## What an item may say
 
 An item states only what exists, and the test holds it to that:
@@ -69,7 +83,8 @@ An item states only what exists, and the test holds it to that:
   Where it is not, an item shows only the commands the plugin's own scripts and code run, and the
   test reads them from there;
 - **a `cmd-*.sh`**: the plugin's own, or one of the workspace's, with flags it has;
-- the workspace is container-based (DDEV by default); no token, no account id, no personal path.
+- the workspace is container-based (DDEV by default); no token, no account id, no personal path;
+- nothing that belongs to one AI assistant: see above.
 
 The fixture, for a CLI that is here:
 

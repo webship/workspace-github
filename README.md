@@ -42,6 +42,8 @@ The plugin places no `cmd-*.sh`: in a project's folder `gh issue list`, `gh pr l
 nothing to them. A project that carries a webship-js suite is tested by the workspace's own
 `cmd-tools-testing.sh <project> --run`, which the agent and the prompt use when it is there.
 
+The item bodies are plain Markdown any AI command-line assistant can follow; Claude Code is the default shape (the frontmatter, the launch command of the prompt).
+
 How the items are laid out and checked: [docs/plugin-items-pattern.md](docs/plugin-items-pattern.md).
 
 ## What it needs
