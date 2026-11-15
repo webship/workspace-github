@@ -1,6 +1,6 @@
 {
   "name": "@webship.co/workspace-github",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, the credential gh-based work uses from the dashboard, and its AI items in their folders: an agent, a skill, a command and a prompt. A provider of @webship.co/workspace-forge.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
