@@ -108,3 +108,5 @@ hand over to the agent `github-issue-pr-worker`, or start a session with the pro
   of the repository instead. Check out a branch first.
 - **A remote on another forge** (GitLab, Bitbucket) gets that forge's plugin and its menu, not this one.
 - **`host:` changed**: projects whose remote is on the old host lose the menu. One plugin, one host.
+- **`gh issue view <number>` or `gh pr view <number>` answers "Projects (classic) is being deprecated"**:
+  an older gh asks for a field GitHub no longer serves. The `--json` form above names its fields and works.
