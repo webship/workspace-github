@@ -110,3 +110,5 @@ hand over to the agent `github-issue-pr-worker`, or start a session with the pro
 - **`host:` changed**: projects whose remote is on the old host lose the menu. One plugin, one host.
 - **`gh issue view <number>` or `gh pr view <number>` answers "Projects (classic) is being deprecated"**:
   an older gh asks for a field GitHub no longer serves. The `--json` form above names its fields and works.
+  `gh pr edit` fails the same way there; the body of a pull request is then updated with
+  `gh api --method PATCH repos/<owner>/<name>/pulls/<number> --field body=@<file>`.

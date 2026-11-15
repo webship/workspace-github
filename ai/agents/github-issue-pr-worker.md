@@ -105,8 +105,12 @@ One issue, one branch, one pull request.
    gh pr checks <number> --watch
    gh run view <run id> --log-failed                   # a red check: read it, fix it, push again
    ```
-7. **The Checkpoints**, as the work goes on: `gh pr edit <number> --body-file <file>` and
-   `gh issue edit <number> --body-file <file>` with the boxes that became true.
+7. **The Checkpoints**, as the work goes on, with the boxes that became true:
+   ```bash
+   gh issue edit <number> --body-file <file>
+   gh pr edit <number> --body-file <file>
+   gh api --method PATCH repos/<owner>/<name>/pulls/<number> --field body=@<file>     # when an older gh fails on gh pr edit
+   ```
 
 ## Rules
 
