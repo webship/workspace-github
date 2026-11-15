@@ -42,7 +42,7 @@ test('the package requires nothing outside itself, and the manifest names files 
   const m = JSON.parse(fs.readFileSync(path.join(PKG, 'package.json'), 'utf8')).workspacePlugin;
   assert.strictEqual(m.name, 'github');
   assert.strictEqual(m.legacySettingsKey, 'git.github');
-  for (const f of [m.settingsTemplate, m.labels, m.scripts.hostInstall, ...((m.ddev && m.ddev.compose) || []), ...(m.features || [])]) assert.ok(fs.existsSync(path.join(PKG, f)), `${f} is in the package`);
+  for (const f of [m.settingsTemplate, m.labels, m.scripts.hostInstall, ...((m.ddev && m.ddev.compose) || []), ...(m.features || []), ...Object.values(m.ai as Record<string, string[]>).flat()]) assert.ok(fs.existsSync(path.join(PKG, f)), `${f} is in the package`);
 });
 
 test('the provider: host, a remote on it reads as owner/name, the pages, the clone URL and the credential gate', () => {

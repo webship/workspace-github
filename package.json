@@ -1,7 +1,7 @@
 {
   "name": "@webship.co/workspace-github",
   "version": "1.0.8",
-  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, and the credential gh-based work uses from the dashboard. A provider of @webship.co/workspace-forge.",
+  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, the credential gh-based work uses from the dashboard, and its AI items in their folders: an agent, a skill, a command and a prompt. A provider of @webship.co/workspace-forge.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "ISC",
@@ -11,7 +11,9 @@
   },
   "files": [
     "dist/src",
+    "ai",
     "config",
+    "docs",
     "features",
     "scripts",
     "README.md",
@@ -28,6 +30,12 @@
     "name": "github",
     "label": "GitHub",
     "needs": {
+      "plugins": [
+        "ai-agents",
+        "ai-skills",
+        "ai-commands",
+        "ai-prompts"
+      ],
       "commands": [
         {
           "command": "gh",
@@ -41,6 +49,20 @@
     "legacySettingsKey": "git.github",
     "scripts": {
       "hostInstall": "scripts/host-install.sh"
+    },
+    "ai": {
+      "agents": [
+        "ai/agents/github-issue-pr-worker.md"
+      ],
+      "skills": [
+        "ai/skills/github-forge"
+      ],
+      "commands": [
+        "ai/commands/github-status.md"
+      ],
+      "prompts": [
+        "ai/prompts/github-issue-to-pr.md"
+      ]
     },
     "features": [
       "features/github.feature"

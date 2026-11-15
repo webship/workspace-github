@@ -13,7 +13,8 @@ const manifest = JSON.parse(fs.readFileSync(path.join(PKG, 'package.json'), 'utf
 const walk = (dir: string): string[] => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
 
 test("the manifest says what the plugin needs: the plugins and the commands it cannot work without, and what a part of it uses", () => {
-  assert.deepStrictEqual(manifest.needs, {'commands': [{'command': 'gh', 'hint': 'https://cli.github.com'}]});
+  assert.deepStrictEqual(manifest.needs, {'plugins': ['ai-agents', 'ai-skills', 'ai-commands', 'ai-prompts'], 'commands': [{'command': 'gh', 'hint': 'https://cli.github.com'}]});
+  for (const kind of ['agents', 'skills', 'commands', 'prompts']) assert.ok(manifest.ai[kind].length > 0, `it ships ${kind}, which is why it needs the folder they are placed in`);
   assert.deepStrictEqual(manifest.suggests, undefined);
   const sources = ['commands', 'scripts', 'src'].flatMap((d) => (fs.existsSync(path.join(PKG, d)) ? walk(path.join(PKG, d)) : [])).map((f) => fs.readFileSync(f, 'utf8')).join('\n');
   for (const command of ['gh']) assert.match(sources, new RegExp(`(^|[^A-Za-z0-9_-])${command}([^A-Za-z0-9_-]|$)`, 'm'), `${command} is called by the plugin`);

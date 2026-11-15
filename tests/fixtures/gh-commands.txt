@@ -1,0 +1,19 @@
+# gh version 2.45.0 (2025-07-18 Ubuntu 2.45.0-1ubuntu0.3): each command an item may name, with the flags its --help lists
+gh auth status --help --hostname --show-token
+gh issue list --app --assignee --author --help --jq --json --label --limit --mention --milestone --repo --search --state --template --web
+gh issue view --comments --help --jq --json --repo --template --web
+gh issue create --assignee --body --body-file --help --label --milestone --project --recover --repo --template --title --web
+gh issue comment --body --body-file --edit-last --editor --help --repo --web
+gh issue edit --add-assignee --add-label --add-project --body --body-file --help --milestone --remove-assignee --remove-label --remove-project --repo --title
+gh pr list --app --assignee --author --base --draft --head --help --jq --json --label --limit --repo --search --state --template --web
+gh pr view --comments --help --jq --json --repo --template --web
+gh pr create --assignee --base --body --body-file --draft --fill --fill-first --fill-verbose --head --help --label --milestone --no-maintainer-edit --project --recover --repo --reviewer --template --title --web
+gh pr checks --fail-fast --help --interval --repo --required --watch --web
+gh pr edit --add-assignee --add-label --add-project --add-reviewer --base --body --body-file --help --milestone --remove-assignee --remove-label --remove-project --remove-reviewer --repo --title
+gh pr merge --admin --author-email --auto --body --body-file --delete-branch --disable-auto --help --match-head-commit --merge --rebase --repo --squash --subject
+gh pr diff --color --help --name-only --patch --repo --web
+gh repo view --branch --help --jq --json --template --web
+gh repo clone --help --upstream-remote-name
+gh run list --branch --commit --created --event --help --jq --json --limit --repo --status --template --user --workflow
+gh run view --attempt --exit-status --help --job --jq --json --log --log-failed --repo --template --verbose --web
+gh api --cache --field --header --help --hostname --include --input --jq --method --paginate --preview --raw-field --silent --template --verbose
