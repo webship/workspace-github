@@ -6,6 +6,7 @@ Work issue <number> of the GitHub repository of the project <project> to a pull 
 # ~/workspace/<folder>/<project> · container-based (DDEV by default) · gh and git run on the machine
 # stop if gh is not signed in (gh auth status) or the remote of the project is not on GitHub
 # never print a token; never tick "Reviewed by a human" or "Code review by maintainers"; never merge
+# a feature to write or a run to read: the book Automated Functional Testing Recipes first (its README.md, then the matching chapter), from .claude/automated-functional-testing-recipes/ in the project, ~/.claude/automated-functional-testing-recipes/ or https://github.com/webship/webship-js-ai-agent/tree/2.0.x/automated-functional-testing-recipes
 
 1. cd ~/workspace/<folder>/<project> ; git status --short ; git remote get-url origin
    stop if there are changes that are not yours
