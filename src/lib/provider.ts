@@ -12,6 +12,8 @@ import { repoPathAt } from '@webship.co/workspace-forge';
 import type { ForgeItem, ForgeProvider, ForgeRepo } from '@webship.co/workspace-forge';
 
 const configured = (v: unknown) => { const s = String(v == null ? '' : v).trim(); return s && s !== 'CHANGE_ME' ? s : null; };
+/** One word for a shell: single-quoted. A remote or a branch name may hold `;` or `$`. */
+const shq = (v: unknown) => `'${String(v).replace(/'/g, `'\\''`)}'`;
 
 function hasCli(name: string): boolean {
   for (const d of ['/host-local-bin', ...String(process.env.PATH || '').split(':')]) {
@@ -74,7 +76,13 @@ export function githubProvider(api: PluginApi): ForgeProvider {
     urls: (repo) => ({ issues: `${repo.web}/issues`, pulls: `${repo.web}/pulls`, newIssue: `${repo.web}/issues/new`, newPull: (branch) => `${repo.web}/compare/${encodeURIComponent(branch)}?expand=1` }),
     listIssues: (repo, lib, e) => list('issue', repo, lib, e),
     listPulls: (repo, lib, e) => list('pr', repo, lib, e),
-    newPullCommand: (repo, branch) => `git push -u origin ${branch} && gh pr create -R ${host()}/${repo.path} --head ${branch} --fill`,
+    // gh is asked first: without it, or without a login it can use at this host, nothing is pushed and the line says
+    // which step is missing. Then the branch goes to the remote the repository was found on, not always origin.
+    newPullCommand: (repo, branch) => [
+      `command -v gh >/dev/null 2>&1 || { echo ${shq(`gh is not installed, and opening a pull request from here needs it: https://cli.github.com (then gh auth login --hostname ${host()}). Or open one on ${repo.web}/compare/${encodeURIComponent(branch)}?expand=1. Nothing was pushed.`)}; exit 1; }`,
+      `{ [ -n "\${GH_TOKEN:-}" ] || gh auth status --hostname ${shq(host())} >/dev/null 2>&1; } || { echo ${shq(`gh is not signed in at ${host()}: run gh auth login --hostname ${host()}, then try again. Nothing was pushed.`)}; exit 1; }`,
+      `git push -u ${shq(repo.remote)} ${shq(branch)} && gh pr create -R ${shq(`${host()}/${repo.path}`)} --head ${shq(branch)} --fill`,
+    ].join('; '),
     // git borrows gh's login for a private clone, the way the AI-items sync does; the token is in the environment when the dashboard runs it.
     cloneEnv: () => `GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=credential.https://${host()}.helper GIT_CONFIG_VALUE_0='!gh auth git-credential'`,
     clone: { pattern: /^[\w.-]+\/[\w.-]+$|^(https?:\/\/|git@)[\w.-]+[:/][\w./-]+$/, placeholder: 'webship/workspace', help: 'A GitHub repository is owner/name, or its clone URL.' },
