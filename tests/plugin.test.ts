@@ -84,3 +84,29 @@ test('a remote on another forge gets no GITHUB menu', () => {
   register(api);
   assert.strictEqual(calls.rowMenus.github.fn({ key: 'dev', project: 'site1', dir: path.join(root, 'dev'), meta: {}, allowed: new Set(), vals: () => '' }), null);
 });
+
+test('the token never rides on curl\'s command line: it is read from a header file only its owner can read, removed after', async () => {
+  const PATH = process.env.PATH;
+  process.env.PATH = fs.mkdtempSync(path.join(os.tmpdir(), 'no-gh-'));   // no gh: the REST API through curl
+  try {
+    let seen: any = null;
+    const lib: any = {
+      cliError: (s: string) => s,
+      run: async (cmd: string, args: string[]) => {
+        const at = args.find((a) => a.startsWith('@'));
+        const file = at ? at.slice(1) : '';
+        seen = { cmd, args, file, text: file ? fs.readFileSync(file, 'utf8') : '', mode: file ? (fs.statSync(file).mode & 0o777) : 0 };
+        return { ok: true, code: 0, stdout: '[]', stderr: '' };
+      },
+    };
+    const p = githubProvider(fakeApi(os.tmpdir(), { host: 'github.com', token: 'ghp_secret_token_x' }).api);
+    await p.listIssues({ path: 'webship/workspace' } as any, lib, { ...process.env, GH_TOKEN: 'ghp_secret_token_x' });
+    assert.strictEqual(seen.cmd, 'curl');
+    assert.ok(!seen.args.some((a: string) => a.includes('ghp_secret_token_x')), `not on the command line: ${seen.args.join(' ')}`);
+    assert.match(seen.text, /^Authorization: Bearer ghp_secret_token_x$/m, 'in the header file');
+    assert.strictEqual(seen.mode, 0o600);
+    assert.ok(!fs.existsSync(seen.file), 'the file is removed after the call');
+  } finally {
+    process.env.PATH = PATH;
+  }
+});
