@@ -14,3 +14,59 @@ email:
 token:
   label: Token
   info: 'A fine-grained personal access token (Settings → Developer settings). Read-only is enough for the lists and the AI-items sync; pull requests from the dashboard need write on the repositories.'
+tracker.allow_writes:
+  label: Writes to GitHub (issues as work items)
+  info: 'Off: the AI works on a branch and nothing leaves this machine. On: you may push the branch and open a draft pull request, comment, close, label and assign, each a click after a preview, each a line in actions.log.'
+  options:
+    "false": "Off — nothing is written to GitHub (default)"
+    "true": "On — each write is your click after a preview"
+tracker.max_agents:
+  label: Author sessions at once
+  info: 'How many AI sessions may work issues at the same time. Each is a whole session in a project.'
+  number: { min: 1, max: 8, step: 1 }
+tracker.default_scope:
+  label: Default repository for issues
+  info: 'owner/name: the repository a project works against when its own remote is not on GitHub and it remembers none.'
+tracker.scopes:
+  label: Repositories the issues list may switch to
+  info: 'A list of owner/name. Empty is any. Edit it in the Raw YAML tab.'
+tracker.work_in:
+  label: Where the AI works
+  info: 'A new branch in the project (a running site shows the change), or a git worktree outside the workspace folders (the project stays as it is).'
+  options:
+    branch: "A branch in the project (default)"
+    worktree: "A worktree outside the workspace folders"
+tracker.sandbox:
+  label: Sandbox for the author session
+  info: 'Required: Claude Code''s sandboxed Bash (no network, credentials denied), and no session without it. On Ubuntu 24.04 bubblewrap needs its AppArmor profile (see the tracker''s README). Off: your choice, said in the form.'
+  options:
+    required: "Required (default)"
+    "off": "Off — the session is not sandboxed"
+tracker.network_domains:
+  label: Domains the sandbox allows
+  info: 'The package registries the project needs (registry.npmjs.org, repo.packagist.org…). None by default. Edit it in the Raw YAML tab.'
+tracker.allow_web:
+  label: Web tools in the author session
+  info: 'WebFetch and WebSearch. Off by default: a link in an issue is not opened.'
+  options:
+    "false": "Off (default)"
+    "true": "On"
+tracker.comments_from:
+  label: Comments the AI reads
+  info: 'Members: only comments by members and collaborators of the repository (default). All, or none.'
+  options:
+    members: "Members and collaborators (default)"
+    all: "All comments"
+    none: "No comments"
+tracker.outsider_items:
+  label: Issues from outside the repository
+  info: 'Opened, or last edited, by someone who is not a member or collaborator. Analyze: analyze only, unless you tick a confirmation that names them. Refuse: analyze only.'
+  options:
+    analyze: "Analyze only, unless confirmed by name (default)"
+    refuse: "Analyze only"
+tracker.draft:
+  label: Draft pull requests
+  info: 'Open the pull request as a draft, so it cannot be merged by accident.'
+  options:
+    "true": "Drafts (default)"
+    "false": "Ready for review"

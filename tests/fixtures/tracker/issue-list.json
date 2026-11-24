@@ -1,0 +1,76 @@
+[
+ {
+  "assignees": [],
+  "author": {
+   "id": "ID_id",
+   "is_bot": false,
+   "login": "owner1",
+   "name": "Owner One"
+  },
+  "labels": [
+   {
+    "id": "ID_id",
+    "name": "proof",
+    "description": "Test data for the tracker proof",
+    "color": "BFD4F2"
+   }
+  ],
+  "milestone": null,
+  "number": 3,
+  "state": "OPEN",
+  "title": "Hidden text in an issue is shown to the person and the AI",
+  "updatedAt": "2026-11-24T19:26:34Z",
+  "url": "https://github.com/acme/site/issues/3"
+ },
+ {
+  "assignees": [],
+  "author": {
+   "id": "ID_id",
+   "is_bot": false,
+   "login": "owner1",
+   "name": "Owner One"
+  },
+  "labels": [
+   {
+    "id": "ID_id",
+    "name": "proof",
+    "description": "Test data for the tracker proof",
+    "color": "BFD4F2"
+   }
+  ],
+  "milestone": null,
+  "number": 2,
+  "state": "OPEN",
+  "title": "The usage page spells greeting as greting",
+  "updatedAt": "2026-11-24T19:26:32Z",
+  "url": "https://github.com/acme/site/issues/2"
+ },
+ {
+  "assignees": [],
+  "author": {
+   "id": "ID_id",
+   "is_bot": false,
+   "login": "owner1",
+   "name": "Owner One"
+  },
+  "labels": [
+   {
+    "id": "ID_id",
+    "name": "proof",
+    "description": "Test data for the tracker proof",
+    "color": "BFD4F2"
+   }
+  ],
+  "milestone": {
+   "number": 1,
+   "title": "Proof round 1",
+   "description": "The first round of the tracker proof",
+   "dueOn": "2026-11-30T00:00:00Z"
+  },
+  "number": 1,
+  "state": "OPEN",
+  "title": "The greeting script says Helo instead of Hello",
+  "updatedAt": "2026-11-24T19:26:41Z",
+  "url": "https://github.com/acme/site/issues/1"
+ }
+]

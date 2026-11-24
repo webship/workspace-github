@@ -25,3 +25,12 @@ Feature: The GitHub plugin on a project row
   Scenario: The AI Prompts folder lists the prompt the plugin ships
     Given I am on "/ai-prompts?q=github-issue-to-pr"
      Then I should see "github-issue-to-pr"
+
+  # The issues as work items (@webship.co/workspace-tracker): the plugin answers the tracker's own pages.
+  Scenario: The tracker's pages are the plugin's, and an unknown project is refused
+    Given I am on "/fragments/p/github/tracker/list/dev/no-such-project"
+     Then I should see "Unknown project."
+
+  Scenario: The plugin's page labels the tracker settings, with writes off
+    Given I am on "/settings/plugin/github"
+     Then I should see "Writes to GitHub (issues as work items)"

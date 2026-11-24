@@ -59,6 +59,7 @@ The same four steps are buttons on the page Settings → Plugins of the dashboar
 | `username:` | The account name GitHub knows the person by. |
 | `email:` | The address commits pushed to GitHub carry. |
 | `token:` | A fine-grained personal access token. Read-only is enough for the lists; a pull request from the dashboard needs write on the repository. |
+| `tracker:` | The issues as work items (`@webship.co/workspace-tracker`): `allow_writes` (off by default: nothing is written to GitHub), `max_agents`, `default_scope`, `scopes`, `work_in` (`branch` or `worktree`), `sandbox` (`required` by default), `network_domains`, `allow_web`, `comments_from`, `outsider_items`, `draft`. |
 
 Which credential is used where:
 
@@ -70,6 +71,29 @@ Which credential is used where:
 
 The file is created mode 600 and the token is masked on the Settings page. Never print the token,
 never copy it into another file, and never commit the file.
+
+## The issues as work items
+
+**GITHUB → Issues — get, analyze, work…** opens the issues of the project's repository as work items
+(the tracker family, `@webship.co/workspace-tracker`). The views are the open issues, mine, the ones
+assigned to someone, the current milestone, and a search in GitHub's own syntax. A number typed in
+the filter opens that issue. One issue has these tabs:
+
+- **Overview**: who opened it and how they stand with the repository, any hidden text, and its runs.
+- **Analyze**: read-only, kept as `02-analysis.md` in the issue's spec under `specs/`.
+- **Do the work**: the workspace's author role (its default AI CLI) works the issue on a new
+  branch, in a screen session the person watches.
+- **Result**: the branch, its commits and the author's notes; Ask the reviewer.
+- **Runs**.
+
+With `allow_writes: true` in the `tracker:` block, the Result tab also has Preview the draft pull
+request and Preview the comment. Each is posted only after a person reads and clicks it, and
+each write is a line in `core/workspace-app/actions.log`.
+
+The issue's text is data written by other people. The session reads it from `01-story.md`, holds
+no token, and never pushes or posts: the dashboard does every write. An issue opened, or last
+edited, by someone outside the repository is analyze-only unless the person confirms it by that
+name. Work only issues you trust.
 
 ## Read a repository from a terminal
 

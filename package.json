@@ -1,7 +1,7 @@
 {
   "name": "@webship.co/workspace-github",
   "version": "1.0.14",
-  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues, pull requests, open one from the branch), the repository chip, clone when a new folder is made, the credential gh-based work uses from the dashboard, and its AI items in their folders: an agent, a skill, a command and a prompt. A provider of @webship.co/workspace-forge.",
+  "description": "GitHub for Webship Workspace: the GITHUB menu on every project whose remote is on github.com (repository, issues as work items, pull requests, open one from the branch), the repository chip, clone when a new folder is made, the credential gh-based work uses from the dashboard, and its AI items in their folders: an agent, a skill, a command and a prompt. A provider of @webship.co/workspace-forge and of @webship.co/workspace-tracker: an issue is read, analyzed and worked by the workspace's AI CLI on a branch, and with writes on a draft pull request and a comment are each a person's click after a preview.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "ISC",
@@ -80,7 +80,8 @@
     }
   },
   "dependencies": {
-    "@webship.co/workspace-forge": "^1.0.2"
+    "@webship.co/workspace-forge": "github:webship/workspace-forge#13-menu-items",
+    "@webship.co/workspace-tracker": "github:webship/workspace-tracker#1-first-version"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
