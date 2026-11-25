@@ -1,0 +1,46 @@
+{
+ "assignees": [],
+ "author": {
+  "id": "ID_id",
+  "is_bot": false,
+  "login": "owner1",
+  "name": "Owner One"
+ },
+ "body": "### Problem/Motivation\n\n`bash greeting.sh Rajab` prints `Helo, Rajab!`. It should print `Hello, Rajab!`.\n\n### Proposed resolution\n\nFix the word in `greeting.sh`, and keep the rest of the script as it is.\n\n### Checkpoints\n- [x] File an issue about this project\n- [ ] Addition/Change/Update/Fix to this project\n- [ ] Release",
+ "comments": [
+  {
+   "id": "ID_id",
+   "author": {
+    "login": "owner1"
+   },
+   "authorAssociation": "MEMBER",
+   "body": "A comment from a member, for the snapshot.",
+   "createdAt": "2026-11-24T19:26:41Z",
+   "includesCreatedEdit": false,
+   "isMinimized": false,
+   "minimizedReason": "",
+   "reactionGroups": [],
+   "url": "https://github.com/acme/site/issues/1#issuecomment-7142106046",
+   "viewerDidAuthor": true
+  }
+ ],
+ "labels": [
+  {
+   "id": "ID_id",
+   "name": "proof",
+   "description": "Test data for the tracker proof",
+   "color": "BFD4F2"
+  }
+ ],
+ "milestone": {
+  "number": 1,
+  "title": "Proof round 1",
+  "description": "The first round of the tracker proof",
+  "dueOn": "2026-11-30T00:00:00Z"
+ },
+ "number": 1,
+ "state": "OPEN",
+ "title": "The greeting script says Helo instead of Hello",
+ "updatedAt": "2026-11-24T19:26:41Z",
+ "url": "https://github.com/acme/site/issues/1"
+}

@@ -11,3 +11,29 @@ username: CHANGE_ME
 email: CHANGE_ME
 # A fine-grained personal access token (Settings → Developer settings). Read-only is enough for the lists and the AI-items sync; pull requests from the dashboard need write on the repositories.
 token: CHANGE_ME
+# The issues as work items (the tracker family): read one, analyze it, have the workspace's AI CLI work it on a
+# branch in a screen session you watch, then, with writes on, push the branch and open a draft pull request, and
+# comment, each a click after a preview. See @webship.co/workspace-tracker for every key.
+tracker:
+  # Writes to GitHub: push and draft pull request, comment, close and reopen, labels, assign, new issues. Off by default.
+  allow_writes: false
+  # Author sessions at once.
+  max_agents: 1
+  # The repository a project works against when its remote is not on GitHub and it remembers none (owner/name).
+  default_scope: ""
+  # The repositories the list may be switched to (owner/name); empty is any.
+  scopes: []
+  # branch: a new branch in the project; worktree: a git worktree outside the workspace folders.
+  work_in: branch
+  # required: Claude Code's sandbox for the author session, and no session without it; off: a person's choice.
+  sandbox: required
+  # Domains the sandbox allows (the project's package registries).
+  network_domains: []
+  # WebFetch and WebSearch in the author session.
+  allow_web: false
+  # The comments an issue's snapshot keeps: members, all, none.
+  comments_from: members
+  # An issue from outside the repository: analyze (work it only after a confirmation that names its author) or refuse.
+  outsider_items: analyze
+  # Open pull requests as drafts.
+  draft: true

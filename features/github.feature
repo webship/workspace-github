@@ -25,3 +25,27 @@ Feature: The GitHub plugin on a project row
   Scenario: The AI Prompts folder lists the prompt the plugin ships
     Given I am on "/ai-prompts?q=github-issue-to-pr"
      Then I should see "github-issue-to-pr"
+
+  # The issues as work items (@webship.co/workspace-tracker): their settings are labelled on the plugin's page.
+  Scenario: The plugin's page labels the tracker settings, with writes off
+    Given I am on "/settings/plugin/github"
+     Then I should see "Writes to GitHub (issues as work items)"
+
+  # The issues list asks GitHub again when its View or its filter changes, and Enter submits it. It needs issues to
+  # read: a project of the dev folder whose remote is on GitHub, and tracker.default_scope set. CI has neither, so it
+  # skips this and says why; with them it is a real test.
+  @needs-setting-github-default_scope @needs-project-dev
+  Scenario: The issues list follows its View and its filter
+    Given I am on "/dev"
+     When I click on the element ".act-menu-github > button"
+      And I click on the element ".act-menu-github a[hx-get*='/tracker/list/']"
+     Then eventually I should see "All open issues ·" within 30 seconds
+     When I select "Current milestone" from "view"
+     Then eventually I should see "Current milestone ·" within 30 seconds
+     When I fill in "q" with "#3"
+      And I press the key "Enter" on the element "input[name=q]"
+     Then eventually I should see "GitHub issue #3 ·" within 30 seconds
+     When I fill in "q" with "#1"
+      And I press "Show"
+     Then eventually I should see "GitHub issue #1 ·" within 30 seconds
+

@@ -12,6 +12,28 @@ project's folder.
 
 The lists come from `gh` (`gh issue list`, `gh pr list`) with the token in the environment, or from the REST API with `curl` when gh is not there; a pull request from the current branch is `gh pr create --head <branch> --fill` in a terminal in the project. The token also serves the dashboard's other GitHub work (the AI-items sync, the tooling repository): `github-auth.js` asks this plugin first, through `api.addForge('github.com', …)`.
 
+## The issues as work items
+
+The plugin is also a provider of the tracker family, [`@webship.co/workspace-tracker`](https://github.com/webship/workspace-tracker).
+**GITHUB → Issues — get, analyze, work…** takes the place of the plain issues list. It opens the issues of the project's
+repository as work items:
+
+- the views: open, mine, assigned to someone, the current milestone, and a search in GitHub's syntax;
+- one issue: who opened it and how they stand with the repository (author association, and the permission of whoever last
+  edited it), Analyze (read-only), Do the work, Result and Runs.
+
+**Do the work** reads the issue once into a spec under `specs/`, as data. The workspace's author role (Claude Code by default)
+then works it on a new branch, or a worktree, in a screen session you watch. With `tracker.allow_writes: true`, the Result
+tab previews a **draft** pull request (`Closes #N`, the author's notes, the Checkpoints) and a comment. Nothing is posted
+until you click; the dashboard pushes with gh's credential and writes a line in `actions.log`. Closing, reopening,
+labels, assignees and new issues (New folder) are there too, with writes on. GitHub has no worklog, so none is offered.
+Projects v2 (an iteration field, the Status board) comes once the login has the `read:project` scope.
+
+The session holds no token and never pushes or posts. An issue opened, or last edited, by someone outside the repository is
+analyze-only unless you confirm it by that name. The issue's text can still steer the session within the project:
+**do the work only on issues you trust.** The guards, the sandbox (and its fix on Ubuntu 24.04) and every `tracker:` key
+are in the tracker's README.
+
 ## Use it
 
 ```bash
@@ -62,6 +84,7 @@ It also needs the four AI folders its items are placed in (`needs.plugins`): `ai
 | Path | What it is |
 | --- | --- |
 | `src/index.ts` | `register(api)`: `registerForge(api, githubProvider(api))` |
+| `src/lib/tracker.ts` | The tracker provider: the issues of the project's repository through gh, their authors' standing, and the writes (comment, close, labels, assign, new issue, a draft pull request pushed by the dashboard) |
 | `src/lib/provider.ts` | The GitHub provider: the host, the credential, how a remote reads, the pages, the issue and request lists, the clone URL |
 | `config/plugin.github.settings.yml` | The settings template |
 | `scripts/host-install.sh` | The host side: the CLI and the credential check |
