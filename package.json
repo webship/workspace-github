@@ -80,8 +80,8 @@
     }
   },
   "dependencies": {
-    "@webship.co/workspace-forge": "github:webship/workspace-forge#13-menu-items",
-    "@webship.co/workspace-tracker": "github:webship/workspace-tracker#1-first-version"
+    "@webship.co/workspace-forge": "^1.0.11",
+    "@webship.co/workspace-tracker": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
