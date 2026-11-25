@@ -34,5 +34,5 @@ export function register(api: PluginApi): void {
   const forge = githubProvider(api);
   // The issues as work items (the tracker family): their entry goes into the GITHUB menu, so GitHub keeps one button.
   const tracker = registerTracker(api, githubTracker(api, forge), { menu: 'none', settingsBlock: 'tracker', typeAction: null });
-  registerForge(api, { ...forge, menuItems: (ctx: RowContext) => tracker.menuItems(ctx, { header: false }) });
+  registerForge(api, { ...forge, menuItems: (ctx: RowContext) => tracker.menuItems(ctx, { header: false, whenBlocked: 'none' }) });
 }

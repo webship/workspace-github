@@ -152,6 +152,13 @@ test('a draft pull request is pushed only to the scope\'s own repository, with h
 
 test('register(): one GITHUB button, whose menu opens the issues as work items, and the tracker\'s actions', () => {
   const root = tree();
+  // gh is there (a stand-in on the PATH), so the tracker is ready and its entry takes the place of the plain list.
+  const bin = path.join(root, 'bin');
+  fs.mkdirSync(bin);
+  fs.writeFileSync(path.join(bin, 'gh'), '#!/bin/sh\nexit 0\n', { mode: 0o755 });
+  const PATH = process.env.PATH;
+  process.env.PATH = `${bin}:${PATH}`;
+  after(() => { process.env.PATH = PATH; });
   const { api, calls } = fakeApi(root);
   register(api);
   assert.deepStrictEqual(Object.keys(calls.rowMenus), ['github'], 'no second button');
@@ -162,4 +169,20 @@ test('register(): one GITHUB button, whose menu opens the issues as work items, 
   assert.match(html, /\/fragments\/p\/github\/tracker\/list\/dev\/site1/);
   assert.match(html, /Issues — get, analyze, work…/);
   assert.ok(!/Open issues<\/a>/.test(html), 'the work-item list takes the place of the plain one');
+});
+
+test('without gh the GITHUB menu keeps its plain issues list: the tracker waits until it can be used', () => {
+  const root = tree();
+  const PATH = process.env.PATH;
+  process.env.PATH = path.join(root, 'no-bin');
+  try {
+    const { api, calls } = fakeApi(root);
+    register(api);
+    const ctx: any = { key: 'dev', project: 'site1', dir: path.join(root, 'dev'), meta: {}, allowed: new Set(), vals: () => '' };
+    const html = calls.rowMenus.github.fn(ctx);
+    if (!fs.existsSync('/host-local-bin/gh')) {
+      assert.match(html, /Open issues<\/a>/);
+      assert.ok(!/Issues — get, analyze, work/.test(html));
+    }
+  } finally { process.env.PATH = PATH; }
 });
