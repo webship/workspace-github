@@ -109,6 +109,16 @@ export function githubTracker(api: PluginApi, forge: ForgeProvider): TrackerProv
   }
 
   let who: { at: number; login: string } = { at: 0, login: '' };
+  const defaults = new Map<string, { at: number; branch: string }>();
+  /** The remote of a project folder whose URL is the scope's repository on this host, or ''. */
+  const remoteOf = (dir: string, scope: TrackerScope) => {
+    const remotes = gitRemotes(dir);
+    return Object.keys(remotes).find((n) => { const repo = forge.repoOf(remotes[n], n); return repo && repo.path === scope.id; }) || '';
+  };
+  /** git with hooks off and gh's credential for the host, over https. */
+  const gitWithGh = (dir: string, args: string[], timeoutMs = 120 * 1000) => lib.run('git', [...GIT_SAFE,
+    '-c', `credential.https://${host()}.helper=`, '-c', `credential.https://${host()}.helper=!${ghBin()} auth git-credential`, '-C', dir, ...args],
+  dir, { timeoutMs, env: { ...env(), GIT_TERMINAL_PROMPT: '0' } });
 
   return {
     id: api.name,
@@ -144,6 +154,23 @@ export function githubTracker(api: PluginApi, forge: ForgeProvider): TrackerProv
       const r = await gh(['api', 'user', '--hostname', host(), '--jq', '.login'], 20 * 1000);
       who = { at: Date.now(), login: r.ok ? String(r.stdout || '').trim() : '' };
       return who.login;
+    },
+
+    defaultBranch: async (scope) => {
+      const hit = defaults.get(scope.id);
+      if (hit && Date.now() - hit.at < 10 * 60 * 1000) return hit.branch;
+      const r = await gh(['api', '--hostname', host(), `repos/${scope.id}`, '--jq', '.default_branch'], 30 * 1000);
+      if (!r.ok) throw fail(r);
+      const branch = String(r.stdout || '').trim();
+      if (!/^[A-Za-z0-9._/-]+$/.test(branch)) throw new Error(`no default branch for ${scope.id}`);
+      defaults.set(scope.id, { at: Date.now(), branch });
+      return branch;
+    },
+    fetchBranch: async (scope, dir, branch) => {
+      const remote = remoteOf(dir, scope);
+      if (!remote) return { ok: false, error: `No remote of ${dir} is ${scope.id} on ${host()}.`, ref: '' };
+      const f = await gitWithGh(dir, ['fetch', '--quiet', `https://${host()}/${scope.id}.git`, `+refs/heads/${branch}:refs/remotes/${remote}/${branch}`]);
+      return f.ok ? { ok: true, error: '', ref: `${remote}/${branch}` } : { ok: false, error: lib.cliError(String(f.stderr || f.stdout || '')), ref: '' };
     },
 
     list: async (scope, q) => {
@@ -221,12 +248,8 @@ export function githubTracker(api: PluginApi, forge: ForgeProvider): TrackerProv
      * draft pull request from it. The remote must be the scope's repository: a project pushes only where it came from.
      */
     openRequest: async (scope, r: RequestSpec) => {
-      const remotes = gitRemotes(r.dir);
-      const remote = Object.keys(remotes).find((n) => { const repo = forge.repoOf(remotes[n], n); return repo && repo.path === scope.id; });
-      if (!remote) return { ok: false, error: `No remote of ${r.dir} is ${scope.id} on ${host()}: nothing was pushed.` };
-      const url = `https://${host()}/${scope.id}.git`;
-      const push = await lib.run('git', [...GIT_SAFE, '-c', `credential.https://${host()}.helper=`, '-c', `credential.https://${host()}.helper=!${ghBin()} auth git-credential`,
-        '-C', r.dir, 'push', url, `refs/heads/${r.branch}:refs/heads/${r.branch}`], r.dir, { timeoutMs: 120 * 1000, env: { ...env(), GIT_TERMINAL_PROMPT: '0' } });
+      if (!remoteOf(r.dir, scope)) return { ok: false, error: `No remote of ${r.dir} is ${scope.id} on ${host()}: nothing was pushed.` };
+      const push = await gitWithGh(r.dir, ['push', `https://${host()}/${scope.id}.git`, `refs/heads/${r.branch}:refs/heads/${r.branch}`]);
       if (!push.ok) return { ok: false, error: `git push did not go: ${lib.cliError(String(push.stderr || push.stdout || ''))}` };
       const t = writeTemp(r.body);
       try {

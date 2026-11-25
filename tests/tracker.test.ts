@@ -186,3 +186,20 @@ test('without gh the GITHUB menu keeps its plain issues list: the tracker waits 
     }
   } finally { process.env.PATH = PATH; }
 });
+
+test('the default branch is asked of GitHub; the fetch goes over https with gh\'s credential, into the remote of the scope', async () => {
+  const root = tree();
+  const { api, calls } = fakeApi(root, {}, (cmd, args) => (/repos\/acme\/site --jq \.default_branch/.test(args.join(' ')) ? { ok: true, code: 0, stdout: 'main\n', stderr: '' } : null));
+  const t = githubTracker(api, githubProvider(api));
+  assert.strictEqual(await t.defaultBranch!(SCOPE), 'main');
+  await t.defaultBranch!(SCOPE);
+  assert.strictEqual(calls.ran.filter((x: any) => /default_branch/.test(x.args.join(' '))).length, 1, 'asked once, then cached');
+  const dir = path.join(root, 'dev', 'site1');
+  const f = await t.fetchBranch!(SCOPE, dir, 'main');
+  assert.deepStrictEqual(f, { ok: true, error: '', ref: 'origin/main' });
+  const fetch = calls.ran.find((x: any) => x.cmd === 'git');
+  assert.ok(fetch.args.includes('core.hooksPath=/dev/null'));
+  assert.deepStrictEqual(fetch.args.slice(-4), ['fetch', '--quiet', 'https://github.com/acme/site.git', '+refs/heads/main:refs/remotes/origin/main']);
+  const other = await t.fetchBranch!({ id: 'acme/other', name: 'acme/other', web: 'https://github.com/acme/other' }, dir, 'main');
+  assert.strictEqual(other.ok, false);
+});
